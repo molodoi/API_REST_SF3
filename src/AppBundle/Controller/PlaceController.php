@@ -19,7 +19,7 @@ class PlaceController extends Controller
 {
     
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places")
      */
     public function getPlacesAction(Request $request)
@@ -58,7 +58,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places/{id}")
      */
     public function getPlaceAction($id, Request $request)
@@ -101,7 +101,7 @@ class PlaceController extends Controller
 
 
     /**
-     * @Rest\View()
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"place"})
      * @Rest\Post("/places")
      */
     public function postPlacesAction(Request $request)
@@ -126,7 +126,7 @@ class PlaceController extends Controller
 
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Put("/places/{id}")
      */
     public function updatePlaceAction(Request $request)
@@ -135,7 +135,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Patch("/places/{id}")
      */
     public function patchPlaceAction(Request $request)
@@ -172,7 +172,7 @@ class PlaceController extends Controller
 
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT, serializerGroups={"place"})
      * @Rest\Delete("/places/{id}")
      */
     public function removePlaceAction(Request $request)
@@ -181,9 +181,15 @@ class PlaceController extends Controller
         $place = $em->getRepository('AppBundle:Place')
                     ->find($request->get('id'));
         /* @var $place Place */
-        if($place){
-            $em->remove($place);
-            $em->flush();
+
+        if (!$place) {
+            return;
         }
+
+        foreach ($place->getPrices() as $price) {
+            $em->remove($price);
+        }
+        $em->remove($place);
+        $em->flush();
     }
 }
