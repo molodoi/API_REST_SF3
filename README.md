@@ -23,4 +23,13 @@ Learn how to:
   - Create a ressource
   - Remove a ressource
   - Update a ressource
-- Comming soon
+- Add Suggestions Places Themes and Preferences
+  - Relations, Entities, FormType,..
+  - Validations validation.yml
+  - Serialisations serialization.yml
+- Hypermedia
+  - Json and XML formats with FOSRestBundle config.yml
+  - Content-Type
+  - Hateoas intro
+- API Security
+  - coming soon..

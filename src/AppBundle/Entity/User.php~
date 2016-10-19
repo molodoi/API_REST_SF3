@@ -40,8 +40,6 @@ class User
      */
     protected $preferences;
 
-    const MATCH_VALUE_THRESHOLD = 25;
-
     public function getId()
     {
         return $this->id;
@@ -95,44 +93,5 @@ class User
     public function setPreferences($preferences)
     {
         $this->preferences = $preferences;
-    }
-
-    /**
-     * Add preference
-     *
-     * @param \AppBundle\Entity\Preference $preference
-     *
-     * @return User
-     */
-    public function addPreference(\AppBundle\Entity\Preference $preference)
-    {
-        $this->preferences[] = $preference;
-
-        return $this;
-    }
-
-    /**
-     * Remove preference
-     *
-     * @param \AppBundle\Entity\Preference $preference
-     */
-    public function removePreference(\AppBundle\Entity\Preference $preference)
-    {
-        $this->preferences->removeElement($preference);
-    }
-
-
-    public function preferencesMatch($themes)
-    {
-        $matchValue = 0;
-        foreach ($this->preferences as $preference) {
-            foreach ($themes as $theme) {
-                if ($preference->match($theme)) {
-                    $matchValue += $preference->getValue() * $theme->getValue();
-                }
-            }
-        }
-
-        return $matchValue >= self::MATCH_VALUE_THRESHOLD;
     }
 }

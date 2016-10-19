@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $user = $this->get('doctrine.orm.entity_manager')
                 ->getRepository('AppBundle:User')
-                ->find($request->get('user_id'));
+                ->findById($request->get('user_id'));
         /* @var $user User */
 
         if (empty($user)) {
@@ -52,8 +52,6 @@ class UserController extends Controller
      */
     public function postUsersAction(Request $request)
     {
-               
-        
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -125,5 +123,42 @@ class UserController extends Controller
             $em->remove($user);
             $em->flush();
         }
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"place"})
+     * @Rest\Get("/users/{id}/suggestions")
+     */
+    public function getUserSuggestionsAction(Request $request)
+    {
+        $user = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:User')
+            ->find($request->get('id'));
+        /* @var $user User */
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+
+        $suggestions = [];
+
+        $places = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:Place')
+            ->findAll();
+
+        foreach ($places as $place) {
+            if ($user->preferencesMatch($place->getThemes())) {
+                $suggestions[] = $place;
+            }
+        }
+
+        return $suggestions;
+    }
+
+    // ...
+
+    private function userNotFound()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
     }
 }
