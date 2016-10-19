@@ -32,4 +32,4 @@ Learn how to:
   - Content-Type
   - Hateoas intro
 - API Security
-  - coming soon..
+  - coming soon..Suggestions
