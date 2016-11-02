@@ -33,3 +33,11 @@ Learn how to:
   - Hateoas intro
 - API Security
   - coming soon..Suggestions
+  
+Install
+========================
+- Clone project
+- Make composer install
+- Make php app/console doctrine:database:create
+- Make php app/console doctrine:schema:update --force
+- Make php app/console doctrine:fixtures:load
